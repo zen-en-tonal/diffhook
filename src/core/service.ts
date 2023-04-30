@@ -1,20 +1,21 @@
 import { Fetcher } from './fetcher';
 import { Memo } from './memo';
-import { Diff, DiffObject } from './diff';
+import { Diff } from './diff';
 import { Hook } from './hook';
 import { Error } from './error';
+import { Content, ContentDelta } from './content';
 
-type RunResult<T> =
+type RunResult<T extends Content> =
     | Error
     | { ok: true, noDiff: true }
-    | { ok: true, noDiff: false, diff: DiffObject<T> }
+    | { ok: true, noDiff: false, diff: ContentDelta<T> }
 
-export class Service<T> {
+export class Service<T extends Content> {
     constructor(
         readonly fetcher: Fetcher<T>,
         readonly memo: Memo<T>,
         readonly diff: Diff<T>,
-        readonly hook: Hook<DiffObject<T>>
+        readonly hook: Hook<ContentDelta<T>>
     ) { }
 
     async init(): Promise<boolean> {
