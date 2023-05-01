@@ -19,7 +19,9 @@ export abstract class Driver {
 
     protected async runServices() {
         const keys = Object.keys(this.container)
-        const tasks = keys.map(this.runService)
+        const tasks = keys.map(k => {
+            return this.runService(k)
+        })
         await Promise.all(tasks)
     }
 
