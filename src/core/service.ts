@@ -29,10 +29,10 @@ export class Service<T extends Content> {
         const prev = await this.memo.latest()
         if (!prev.ok) return prev
 
-        if (!this.diff.isDiff(curr.res, prev.res)) {
+        if (!this.diff.isDiff(prev.res, curr.res)) {
             return { ok: true, noDiff: true }
         }
-        const diff = this.diff.diff(curr.res, prev.res)
+        const diff = this.diff.diff(prev.res, curr.res)
 
         const emitRes = await this.hook.emit(diff) 
         if (!emitRes.ok) return emitRes

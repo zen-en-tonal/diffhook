@@ -9,9 +9,8 @@ export class JsonDiff<T extends Content> implements Diff<T> {
     private readonly jsondiffpatch = jsondiffpatch.create()
 
     isDiff(left: T, right: T): boolean {
-        const md5 = createHash('md5')
-        const hashA = md5.update(JSON.stringify(left)).digest()
-        const hashB = md5.update(JSON.stringify(right)).digest()
+        const hashA = createHash('md5').update(JSON.stringify(left)).digest('hex')
+        const hashB = createHash('md5').update(JSON.stringify(right)).digest('hex')
         return hashA !== hashB
     }
 
