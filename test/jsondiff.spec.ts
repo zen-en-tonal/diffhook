@@ -43,3 +43,45 @@ test('removed', () => {
 
     expect(res.removed).toStrictEqual({ 'b': 'fuga' })
 })
+
+test('isDiff falsy with random order', () => {
+    const left = {
+        'a': 'hoge',
+        'b': {
+            'c': 'fuga',
+            'd': 'piyo'
+        }
+    }
+    const right = {
+        'b': {
+            'd': 'piyo',
+            'c': 'fuga'
+        },
+        'a': 'hoge',
+    }
+
+    const diff = new JsonDiff()
+
+    expect(diff.isDiff(left, right)).toBeFalsy()
+})
+
+test('isDiff falsy', () => {
+    const left = {
+        'a': 'hoge',
+        'b': {
+            'c': 'fuga',
+            'd': 'piyo'
+        }
+    }
+    const right = {
+        'a': 'hoge',
+        'b': {
+            'c': 'fuga',
+            'd': 'piyo',
+        },
+    }
+
+    const diff = new JsonDiff()
+
+    expect(diff.isDiff(left, right)).toBeFalsy()
+})
