@@ -1,1 +1,1 @@
-export type Error = { ok: false, reason: string }
+export type Error = { ok: false; reason: string };
