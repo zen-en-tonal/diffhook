@@ -7,12 +7,12 @@ import { FileMemo } from "./memos/file";
 
 const serve = () => {
   const services = {
-    dir: new Service(
-      new DirectoryFetcher("."),
-      new FileMemo("dir"),
-      new JsonDiff(),
-      new ConsoleHook()
-    ),
+    dir: new Service({
+      fetcher: new DirectoryFetcher("."),
+      memo: new FileMemo("dir"),
+      diff: new JsonDiff(),
+      hook: new ConsoleHook(),
+    }),
   };
   const driver = new CronDriver("* * * * *", services);
   driver.run();
