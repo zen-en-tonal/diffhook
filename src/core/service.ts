@@ -11,11 +11,20 @@ type Components<T extends Content> = {
   hook: Hook<ContentDelta<T>>;
 };
 
+type Options = {
+  clearOnInit: boolean;
+};
+
 export class Service<T extends Content> {
-  constructor(readonly components: Readonly<Components<T>>) {}
+  constructor(
+    readonly components: Readonly<Components<T>>,
+    readonly options: Partial<Readonly<Options>> = {}
+  ) {}
 
   async init(): Promise<void> {
-    await this.components.memo.clear();
+    if (this.options.clearOnInit) {
+      await this.components.memo.clear();
+    }
   }
 
   async run(): Promise<ContentDelta<T> | undefined> {
