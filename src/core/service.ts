@@ -22,11 +22,11 @@ export class Service<T extends Content> {
     const curr = await this.components.fetcher.get();
     const prev = await this.components.memo.latest();
 
-    if (!this.components.diff.isDiff(prev.res, curr.res)) return undefined;
-    const diff = this.components.diff.diff(prev.res, curr.res);
+    if (!this.components.diff.isDiff(prev, curr)) return undefined;
+    const diff = this.components.diff.diff(prev, curr);
 
     await this.components.hook.emit(diff);
-    await this.components.memo.push(curr.res);
+    await this.components.memo.push(curr);
 
     return diff;
   }
