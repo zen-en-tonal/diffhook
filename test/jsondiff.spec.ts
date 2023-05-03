@@ -1,4 +1,4 @@
-import { JsonDiff } from "../src/generics/jsondiff";
+import { JsonDiff } from "../src";
 
 test("inserted", () => {
   const left = {

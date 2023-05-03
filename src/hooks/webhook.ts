@@ -1,13 +1,8 @@
 import { Content, ContentDelta } from "../core/content";
 import { Hook } from "../core/hook";
-import fetch, { Response } from "node-fetch";
 
 type Options<T extends Content, Q> = {
   formatter: (doc: ContentDelta<T>) => Q;
-};
-
-const errorMsg = async (resp: Response) => {
-  return `${resp.status}: ${await resp.text()}`;
 };
 
 export class WebHook<T extends Content, Q> implements Hook<T> {
