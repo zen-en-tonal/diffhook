@@ -1,5 +1,4 @@
 import { Content, ContentDelta } from "../core/content";
-import { Error } from "../core/error";
 import { Hook } from "../core/hook";
 import fetch, { Response } from "node-fetch";
 
@@ -17,13 +16,14 @@ export class WebHook<T extends Content, Q> implements Hook<T> {
     readonly options: Partial<Options<T, Q>> = {}
   ) {}
 
-  async emit(delta: ContentDelta<T>): Promise<Error | { ok: true }> {
+  async emit(delta: ContentDelta<T>): Promise<void> {
     const payload = this.options.formatter?.(delta) || delta;
     const resp = await fetch(this.endpoint, {
       method: "POST",
       body: JSON.stringify(payload),
     });
-    if (!resp.ok) return { ok: false, reason: await errorMsg(resp) };
-    return { ok: true };
+    if (!resp.ok) {
+      return Promise.reject(new Error(resp.statusText));
+    }
   }
 }

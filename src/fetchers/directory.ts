@@ -1,5 +1,5 @@
 import fs from "fs";
-import { FetchResult, Fetcher } from "../core/fetcher";
+import { Fetcher } from "../core/fetcher";
 import path from "path";
 
 export type Directory = {
@@ -9,12 +9,12 @@ export type Directory = {
 export class DirectoryFetcher implements Fetcher<Directory> {
   constructor(private readonly watching: string) {}
 
-  get(): Promise<FetchResult<Directory>> {
+  get(): Promise<Directory> {
     const dirents = fs.readdirSync(this.watching, { withFileTypes: true });
     const files = dirents
       .filter((d) => d.isFile())
       .map((d) => ({ [d.name]: path.normalize(d.name) }))
       .reduce((l, r) => Object.assign(l, r), {});
-    return Promise.resolve({ ok: true, res: files });
+    return Promise.resolve(files);
   }
 }
