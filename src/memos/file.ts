@@ -30,21 +30,28 @@ export class FileMemo<T extends Content> implements Memo<T> {
 
   async push(doc: T): Promise<void> {
     await this.clear();
-    fs.writeFileSync(this.generateFilename(), JSON.stringify(doc));
+    fs.writeFileSync(
+      generateFilename(this.tempDir, this.key),
+      JSON.stringify(doc)
+    );
   }
 
   clear(): Promise<void> {
-    unlinkFilesInDir(this.tempDir);
+    unlinkFilesInDir(this.tempDir, this.key);
     return Promise.resolve();
   }
-
-  private generateFilename() {
-    return path.resolve(this.tempDir, `${this.key}-${Date.now()}.json`);
-  }
 }
 
-function unlinkFilesInDir(dir: string) {
-  for (const file of fs.readdirSync(dir)) {
+const generateFilename = (dir: string, key: string) => {
+  return path.resolve(dir, `${key}-${Date.now()}.json`);
+};
+
+export const collectFilenames = (filenames: string[], key: string) => {
+  return filenames.filter((name) => name.match(`^${key}-[0-9]+.json$`));
+};
+
+const unlinkFilesInDir = (dir: string, key: string) => {
+  for (const file of collectFilenames(fs.readdirSync(dir), key)) {
     fs.unlinkSync(path.resolve(dir, file));
   }
-}
+};
