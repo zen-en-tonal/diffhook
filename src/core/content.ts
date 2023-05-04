@@ -8,3 +8,6 @@ export type ContentDelta<T extends Content> = {
   modified?: T;
   removed?: T;
 };
+
+export const isContentDeltaEmpty = (delta: ContentDelta<any>) =>
+  !delta.inserted && !delta.modified && !delta.removed;
