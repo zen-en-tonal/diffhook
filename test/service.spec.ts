@@ -20,7 +20,7 @@ const hookMock = jest.fn<Hook<any>, []>().mockImplementation(() => ({
   emit: jest.fn().mockReturnValue(Promise.resolve()),
 }));
 
-it("if has no diff, should not be diff() called.", () => {
+it("if has no diff, should not to be diff() called.", () => {
   const diff = diffMock.mockImplementation(() => ({
     isDiff: jest.fn().mockReturnValue(false),
     diff: jest.fn().mockReturnValue({}),
@@ -34,4 +34,21 @@ it("if has no diff, should not be diff() called.", () => {
   const service = new Service(components);
   service.run();
   expect(diff.diff).not.toBeCalled();
+});
+
+it("if diff returns empty, should not to be hook.emit called.", () => {
+  const diff = diffMock.mockImplementation(() => ({
+    isDiff: jest.fn().mockReturnValue(true),
+    diff: jest.fn().mockReturnValue({}),
+  }))();
+  const hook = hookMock();
+  const components = {
+    fetcher: fetcherMock(),
+    memo: memoMock(),
+    diff,
+    hook,
+  };
+  const service = new Service(components);
+  service.run();
+  expect(hook.emit).not.toBeCalled();
 });

@@ -2,7 +2,7 @@ import { Fetcher } from "./fetcher";
 import { Memo } from "./memo";
 import { Diff } from "./diff";
 import { Hook } from "./hook";
-import { Content, ContentDelta } from "./content";
+import { Content, ContentDelta, isContentDeltaEmpty } from "./content";
 
 type Components<T extends Content> = {
   fetcher: Fetcher<T>;
@@ -33,6 +33,7 @@ export class Service<T extends Content> {
 
     if (!this.components.diff.isDiff(prev, curr)) return undefined;
     const diff = this.components.diff.diff(prev, curr);
+    if (isContentDeltaEmpty(diff)) return undefined;
 
     await this.components.hook.emit(diff);
     await this.components.memo.push(curr);
